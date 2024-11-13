@@ -1,10 +1,25 @@
-import { GeistSans } from 'geist/font/sans'
+//import { GeistSans } from 'geist/font/sans'
+import { JetBrains_Mono, Oxanium } from 'next/font/google'
 import ThemeProvider from '@/providers/ThemeProvider'
 import NextTopLoader from 'nextjs-toploader'
 import { Analytics } from '@vercel/analytics/react'
 import './globals.css'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import ReactQueryProvider from '@/providers/ReactQueryProvider'
+
+const oxanium = Oxanium({
+  weight: ['400', '500'],
+  subsets: ['latin'],
+  variable: '--font-oxanium',
+  display: 'swap',
+})
+
+const jetBrainsMono = JetBrains_Mono({
+  weight: ['400', '700'],
+  subsets: ['latin'],
+  variable: '--font-jetbrains-mono',
+  display: 'swap',
+})
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -24,10 +39,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={GeistSans.className}
+      className={`${oxanium.variable} ${jetBrainsMono.variable}`}
       style={{ colorScheme: 'dark' }}
     >
-      <body className="bg-background text-foreground">
+      <body className="bg-background font-jetbrains-mono text-foreground">
         <NextTopLoader showSpinner={false} height={2} color="#2acf80" />
         <ThemeProvider
           attribute="class"
