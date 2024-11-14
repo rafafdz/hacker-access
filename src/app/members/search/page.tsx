@@ -14,7 +14,6 @@ export default function MemberSearch() {
     <div className="mx-auto flex max-w-3xl flex-col items-center justify-center space-y-4">
       <h1>Navbar</h1>
       <div className="flex flex-col items-center space-y-4">
-        {/* Contenedor de botones centrado */}
         <div className="flex justify-center space-x-4">
           <SearchFilterButton
             label="registrados"

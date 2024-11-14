@@ -17,7 +17,8 @@ const Dropdown: React.FC<DropdownProps> = ({
           onClick={(e) => handleOptionClick(option, e)}
           className="cursor-pointer px-4 py-4 text-[#bdbecb] hover:bg-[#2f303d]"
         >
-          {option}
+          &#x2705; {option}
+          <p className="text-[12px]">hacker</p>
         </li>
       ))}
       {filteredData.length === 0 && (
