@@ -37,12 +37,13 @@ export default function SearchBar() {
     setIsDropdownVisible(event.target.value.length > 0)
   }
 
-  const handleOptionClick = (
-    option: string,
-    event: MouseEvent<HTMLLIElement>,
-  ): void => {
+  const handleOptionClick = (option: string): void => {
+    /*
+      Acá podría agregarse el envío del id del usuario a la vista members-show para obtener toda la info.
+      También quizás agregar la parte del código donde se guarda la búsqueda en local storage
+    */
     setInputValue(option)
-    setIsDropdownVisible(false)
+    //setIsDropdownVisible(false)
     console.log(option)
   }
 
