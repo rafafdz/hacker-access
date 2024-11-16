@@ -4,6 +4,8 @@
 
 @layer base {
   :root {
+    --font-mono: var(--font-jetbrains-mono), monospace;
+    --font-display: var(--font-oxanium), sans-serif;
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
@@ -56,4 +58,17 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@layer base {
+  .input-base {
+    @apply z-0 h-[45px] w-80 cursor-text rounded-[12px] border-[2px] pl-[0.5rem] 
+           text-[#bdbecb] placeholder-[#bdbecb] outline-none transition-all;
+  }
+
+  .input-border {
+    @apply border-[#2f303d] bg-[#18181B] 
+           hover:shadow-[0_0_0_1.5px_#2f303d] focus:shadow-[0_0_0_1.5px_#2f303d] focus:ring-0;
+  }
+
 }
