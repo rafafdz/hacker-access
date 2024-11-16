@@ -58,7 +58,9 @@ export default function SearchBar({ selectedButton }: SearchBarProps) {
         type="text"
         value={inputValue}
         onChange={handleInputChange}
-        className="input-base input-border"
+        className="z-0 h-[45px] w-80 cursor-text rounded-[12px] border-[2px] border-[#2f303d] 
+           bg-[#18181B] pl-[0.5rem] text-[#bdbecb] placeholder-[#bdbecb] outline-none transition-all 
+           hover:shadow-[0_0_0_1.5px_#2f303d] focus:shadow-[0_0_0_1.5px_#2f303d] focus:ring-0"
         placeholder="Buscar..."
       />
 
