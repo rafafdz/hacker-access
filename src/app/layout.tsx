@@ -1,4 +1,3 @@
-//import { GeistSans } from 'geist/font/sans'
 import { JetBrains_Mono, Oxanium } from 'next/font/google'
 import ThemeProvider from '@/providers/ThemeProvider'
 import NextTopLoader from 'nextjs-toploader'
