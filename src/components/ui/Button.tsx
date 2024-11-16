@@ -1,6 +1,6 @@
 interface ButtonInterface {
   label: string
-  onClick?: () => void // onClick es opcional
+  onClick?: () => void
 }
 
 export default function Button({ label, onClick }: ButtonInterface) {

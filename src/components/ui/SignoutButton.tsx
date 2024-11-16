@@ -1,4 +1,4 @@
-import SignoutIcon from './SignoutIcon'
+import { GoSignOut } from 'react-icons/go'
 
 export default function SignoutButton() {
   const handleClick = () => {
@@ -6,7 +6,7 @@ export default function SignoutButton() {
   }
   return (
     <button onClick={handleClick} className="px-3 py-2">
-      <SignoutIcon />
+      <GoSignOut className="h-6 w-6 hover:text-slate-200" />
     </button>
   )
 }

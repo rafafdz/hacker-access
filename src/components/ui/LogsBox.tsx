@@ -12,6 +12,17 @@ const formatDate = (dateString: string): string => {
   return `${day}/${month}/${hours}:${minutes}`
 }
 
+// Helper function to convert snake_case to camelCase
+const transformToCamelCase = (data: any[]): AccessLog[] => {
+  return data.map((log) => ({
+    accessId: log.access_id,
+    createdAt: log.created_at,
+    entryId: log.entry_id,
+    entryName: log.entry_name,
+    userId: log.user_id,
+  }))
+}
+
 export default function LogsBox({ id }: LogsBoxProps) {
   const supabase = createBrowserClient()
   const [logs, setLogs] = useState<AccessLog[]>([])
@@ -23,7 +34,9 @@ export default function LogsBox({ id }: LogsBoxProps) {
     if (error) {
       console.error(error)
     } else {
-      setLogs(data as AccessLog[])
+      console.log(data) // Log the original data for debugging
+      const transformedData = transformToCamelCase(data)
+      setLogs(transformedData)
     }
   }
 
@@ -32,11 +45,11 @@ export default function LogsBox({ id }: LogsBoxProps) {
   }, [])
 
   return (
-    <div className="flex h-40 max-h-40 w-72 flex-col items-center overflow-y-auto rounded-lg border border-[#2f303d] bg-[#18181B] p-4 shadow-inner">
+    <div className="flex h-40 max-h-40 w-72 flex-col items-center overflow-y-auto rounded-lg border border-zinc-700 bg-zinc-900 p-4 shadow-inner">
       {logs.length > 0 ? (
         logs.map((log) => (
-          <p key={log.access_id} className="mb-2 text-xs text-[#a3a3b6]">
-            {formatDate(log.created_at)} @ {log.entry_name}
+          <p key={log.accessId} className="mb-2 text-xs text-slate-400">
+            {formatDate(log.createdAt)} @ {log.entryName}
           </p>
         ))
       ) : (

@@ -1,11 +1,11 @@
-export interface AccessLog {
-  access_id: number
-  created_at: string
-  entry_id: number
-  entry_name: string
-  user_id: string
+export type AccessLog = {
+  accessId: number
+  createdAt: string
+  entryId: number
+  entryName: string
+  userId: string
 }
 
-export interface LogsBoxProps {
+export type LogsBoxProps = {
   id: number
 }

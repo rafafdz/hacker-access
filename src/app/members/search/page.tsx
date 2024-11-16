@@ -6,11 +6,11 @@ import { createBrowserClient } from '@/utils/supabase'
 import Navbar from '@/components/ui/Navbar/Navbar'
 
 export default function MemberSearch() {
-  const [selectedButton, setSelectedButton] = useState<string>('registrados')
+  const [selectedButton, setSelectedButton] = useState<string>('registered')
   const supabase = createBrowserClient()
-  const [registrados, setRegistrados] = useState<number>(0)
-  const [accedidos, setAccedidos] = useState<number>(0)
-  const [porAcceder, setPorAcceder] = useState<number>(0)
+  const [registered, setRegistered] = useState<number>(0)
+  const [accessed, setAccesed] = useState<number>(0)
+  const [pendingAccess, setPendingAccess] = useState<number>(0)
 
   async function fetchData() {
     const { data, error } = await supabase.rpc('get_kpi_summary')
@@ -19,9 +19,9 @@ export default function MemberSearch() {
     } else {
       console.log(data)
       if (data) {
-        setRegistrados(data.registrados || 0)
-        setAccedidos(data.accedidos || 0)
-        setPorAcceder(data.por_acceder || 0)
+        setRegistered(data.registrados || 0)
+        setAccesed(data.accedidos || 0)
+        setPendingAccess(data.por_acceder || 0) // Después cambiar los nombres de los atributos a la versión en inglés
       }
     }
   }
@@ -41,21 +41,21 @@ export default function MemberSearch() {
         <div className="flex justify-center space-x-4">
           <SearchFilterButton
             label="registrados"
-            count={registrados}
-            isSelected={selectedButton === 'registrados'}
-            onClick={() => handleButtonClick('registrados')}
+            count={registered}
+            isSelected={selectedButton === 'registered'}
+            onClick={() => handleButtonClick('registered')}
           />
           <SearchFilterButton
             label="accedidos"
-            count={accedidos}
-            isSelected={selectedButton === 'accedidos'}
-            onClick={() => handleButtonClick('accedidos')}
+            count={accessed}
+            isSelected={selectedButton === 'accessed'}
+            onClick={() => handleButtonClick('accessed')}
           />
           <SearchFilterButton
             label="por acceder"
-            count={porAcceder}
-            isSelected={selectedButton === 'por acceder'}
-            onClick={() => handleButtonClick('por acceder')}
+            count={pendingAccess}
+            isSelected={selectedButton === 'pending_access'}
+            onClick={() => handleButtonClick('pending_access')}
           />
         </div>
 
