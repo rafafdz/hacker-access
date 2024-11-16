@@ -1,8 +1,8 @@
-import React, { MouseEvent } from 'react'
+import React from 'react'
 
 interface DropdownProps {
-  filteredData: string[]
-  handleOptionClick: (option: string, event: MouseEvent<HTMLLIElement>) => void
+  filteredData: { name: string; value: number }[]
+  handleOptionClick: (optionName: string) => void
 }
 
 const Dropdown: React.FC<DropdownProps> = ({
@@ -14,10 +14,10 @@ const Dropdown: React.FC<DropdownProps> = ({
       {filteredData.map((option, index) => (
         <li
           key={index}
-          onClick={(e) => handleOptionClick(option, e)}
+          onClick={() => handleOptionClick(option.name)}
           className="cursor-pointer px-4 py-4 text-[#bdbecb] hover:bg-[#2f303d]"
         >
-          &#x2705; {option}
+          {option.value === 1 ? '✅' : '❌'} {option.name}
           <p className="text-[12px]">hacker</p>
         </li>
       ))}

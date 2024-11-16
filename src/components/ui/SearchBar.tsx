@@ -1,36 +1,46 @@
-import { useState, ChangeEvent, MouseEvent } from 'react'
+import { useState, ChangeEvent } from 'react'
 import Dropdown from './Dropdown'
 
-export default function SearchBar() {
+interface SearchBarProps {
+  selectedButton: string
+}
+
+export default function SearchBar({ selectedButton }: SearchBarProps) {
   const [isDropdownVisible, setIsDropdownVisible] = useState<boolean>(false)
   const [inputValue, setInputValue] = useState<string>('')
-  const dummyData: string[] = [
-    'John Doe',
-    'Robert Oppenheimer',
-    'Robinson Crusoe',
-    'Richard Feynmann',
-    'John Von Neumann',
-    'John Doe',
-    'John Doe',
-    'John Doe',
-    'John Doe',
-    'John Doe',
-    'John Doe',
-    'John Doe',
-    'John Doe',
-    'John Doe',
-    'John Doe',
-    'John Doe',
-    'John Doe',
-    'John Doe',
-    'John Doe',
-    'John Doe',
-    'John Doe',
+  const dummyData = [
+    { name: 'John Doe', value: 1 },
+    { name: 'Robert Oppenheimer', value: 0 },
+    { name: 'Robinson Crusoe', value: 1 },
+    { name: 'Richard Feynman', value: 0 },
+    { name: 'John Von Neumann', value: 1 },
+    { name: 'Jane Doe', value: 0 },
+    { name: 'Albert Einstein', value: 1 },
+    { name: 'Isaac Newton', value: 0 },
+    { name: 'Nikola Tesla', value: 1 },
+    { name: 'Ada Lovelace', value: 1 },
+    { name: 'Grace Hopper', value: 0 },
+    { name: 'Katherine Johnson', value: 1 },
+    { name: 'Alan Turing', value: 0 },
+    { name: 'Leonardo da Vinci', value: 1 },
+    { name: 'Galileo Galilei', value: 0 },
+    { name: 'Carl Sagan', value: 1 },
+    { name: 'Marie Curie', value: 1 },
+    { name: 'Niels Bohr', value: 0 },
+    { name: 'Erwin Schrödinger', value: 1 },
+    { name: 'Enrico Fermi', value: 0 },
   ]
 
-  const filteredData: string[] = dummyData.filter((option) =>
-    option.toLowerCase().includes(inputValue.toLowerCase()),
-  )
+  const filteredData = dummyData
+    .filter((option) =>
+      option.name.toLowerCase().includes(inputValue.toLowerCase()),
+    )
+    .filter((option) => {
+      if (selectedButton === 'registrados') return true
+      return selectedButton === 'accedidos'
+        ? option.value === 1
+        : option.value === 0
+    })
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setInputValue(event.target.value)
@@ -38,12 +48,7 @@ export default function SearchBar() {
   }
 
   const handleOptionClick = (option: string): void => {
-    /*
-      Acá podría agregarse el envío del id del usuario a la vista members-show para obtener toda la info.
-      También quizás agregar la parte del código donde se guarda la búsqueda en local storage
-    */
     setInputValue(option)
-    //setIsDropdownVisible(false)
     console.log(option)
   }
 
@@ -53,9 +58,7 @@ export default function SearchBar() {
         type="text"
         value={inputValue}
         onChange={handleInputChange}
-        className="duration-[0.25s] ease-[cubic-bezier(0.19,_1,_0.22,_1)] z-0 h-[45px] w-80 cursor-text rounded-[12px] border-[2px] border-[#2f303d] 
-                           bg-[#18181B] pl-[0.5rem] text-[#bdbecb] placeholder-[#bdbecb] outline-none transition-all hover:shadow-[0_0_0_1.5px_#2f303d] 
-                           focus:shadow-[0_0_0_1.5px_#2f303d] focus:ring-0"
+        className="input-base input-border"
         placeholder="Buscar..."
       />
 
