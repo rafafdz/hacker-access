@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import SearchFilterButton from '@/components/ui/SearchFilterButton'
 import SearchBar from '@/components/ui/SearchBar'
 import { createBrowserClient } from '@/utils/supabase'
+import Navbar from '@/components/ui/Navbar/Navbar'
 
 export default function MemberSearch() {
   const [selectedButton, setSelectedButton] = useState<string>('registrados')
@@ -35,6 +36,7 @@ export default function MemberSearch() {
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col items-center justify-center space-y-4">
+      <Navbar />
       <div className="flex flex-col items-center space-y-4">
         <div className="flex justify-center space-x-4">
           <SearchFilterButton
