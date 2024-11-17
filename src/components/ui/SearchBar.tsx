@@ -1,45 +1,36 @@
-import { useState, ChangeEvent } from 'react'
+import { useState, useEffect, ChangeEvent } from 'react'
 import Dropdown from './Dropdown'
+import { createBrowserClient } from '@/utils/supabase'
+import { useRouter } from 'next/navigation'
 
 interface SearchBarProps {
   selectedButton: string
 }
 
+interface Member {
+  email: string
+  external_member_id: string
+  full_name: string
+  id: number
+  member_type_name: string
+  token: string
+  accessed: boolean
+}
+
 export default function SearchBar({ selectedButton }: SearchBarProps) {
   const [isDropdownVisible, setIsDropdownVisible] = useState<boolean>(false)
   const [inputValue, setInputValue] = useState<string>('')
-  const dummyData = [
-    { name: 'John Doe', accessed: 1 },
-    { name: 'Robert Oppenheimer', accessed: 0 },
-    { name: 'Robinson Crusoe', accessed: 1 },
-    { name: 'Richard Feynman', accessed: 0 },
-    { name: 'John Von Neumann', accessed: 1 },
-    { name: 'Jane Doe', accessed: 0 },
-    { name: 'Albert Einstein', accessed: 1 },
-    { name: 'Isaac Newton', accessed: 0 },
-    { name: 'Nikola Tesla', accessed: 1 },
-    { name: 'Ada Lovelace', accessed: 1 },
-    { name: 'Grace Hopper', accessed: 0 },
-    { name: 'Katherine Johnson', accessed: 1 },
-    { name: 'Alan Turing', accessed: 0 },
-    { name: 'Leonardo da Vinci', accessed: 1 },
-    { name: 'Galileo Galilei', accessed: 0 },
-    { name: 'Carl Sagan', accessed: 1 },
-    { name: 'Marie Curie', accessed: 1 },
-    { name: 'Niels Bohr', accessed: 0 },
-    { name: 'Erwin Schrödinger', accessed: 1 },
-    { name: 'Enrico Fermi', accessed: 0 },
-  ]
+  const [members, setMembers] = useState<Member[]>([])
+  const supabase = createBrowserClient()
+  const router = useRouter()
 
-  const filteredData = dummyData
+  const filteredData = members
     .filter((option) =>
-      option.name.toLowerCase().includes(inputValue.toLowerCase()),
+      option.full_name.toLowerCase().includes(inputValue.toLowerCase()),
     )
     .filter((option) => {
       if (selectedButton === 'registered') return true
-      return selectedButton === 'accessed'
-        ? option.accessed === 1
-        : option.accessed === 0
+      return selectedButton === 'accessed' ? option.accessed : !option.accessed
     })
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -47,10 +38,29 @@ export default function SearchBar({ selectedButton }: SearchBarProps) {
     setIsDropdownVisible(event.target.value.length > 0)
   }
 
-  const handleOptionClick = (option: string): void => {
-    setInputValue(option)
-    console.log(option)
+  const handleOptionClick = (token: string): void => {
+    console.log(token)
+    localStorage.setItem('lastSearch', inputValue)
+    router.push(`/members/show/${token}`)
   }
+
+  async function fetchData() {
+    const { data, error } = await supabase.rpc('get_members')
+    if (error) {
+      console.log(error)
+    } else {
+      setMembers(data as Member[])
+    }
+  }
+
+  useEffect(() => {
+    fetchData()
+    const lastSearch = localStorage.getItem('lastSearch')
+    if (lastSearch) {
+      setInputValue(lastSearch)
+      setIsDropdownVisible(lastSearch.length > 0)
+    }
+  }, [])
 
   return (
     <div className="relative mx-auto flex w-full max-w-md flex-col items-center">

@@ -12,7 +12,6 @@ const formatDate = (dateString: string): string => {
   return `${day}/${month}/${hours}:${minutes}`
 }
 
-// Helper function to convert snake_case to camelCase
 const transformToCamelCase = (data: any[]): AccessLog[] => {
   return data.map((log) => ({
     accessId: log.access_id,
@@ -34,7 +33,6 @@ export default function LogsBox({ id }: LogsBoxProps) {
     if (error) {
       console.error(error)
     } else {
-      console.log(data) // Log the original data for debugging
       const transformedData = transformToCamelCase(data)
       setLogs(transformedData)
     }

@@ -1,7 +1,17 @@
 import React from 'react'
 
+interface Member {
+  email: string
+  external_member_id: string
+  full_name: string
+  id: number
+  member_type_name: string
+  token: string
+  accessed: boolean
+}
+
 interface DropdownProps {
-  filteredData: { name: string; accessed: number }[]
+  filteredData: Member[]
   handleOptionClick: (optionName: string) => void
 }
 
@@ -11,14 +21,14 @@ const Dropdown: React.FC<DropdownProps> = ({
 }) => {
   return (
     <ul className="absolute top-[50px] max-h-96 w-80 overflow-y-auto rounded-[8px] bg-zinc-700 shadow-lg">
-      {filteredData.map((option, index) => (
+      {filteredData.map((option) => (
         <li
-          key={index}
-          onClick={() => handleOptionClick(option.name)}
+          key={option.token}
+          onClick={() => handleOptionClick(option.token)}
           className="cursor-pointer px-4 py-4 text-[#bdbecb] hover:bg-[#2f303d]"
         >
-          {option.accessed === 1 ? '✅' : '❌'} {option.name}
-          <p className="text-[12px]">hacker</p>
+          {option.accessed ? '✅' : '❌'} {option.full_name}
+          <p className="text-[12px]">{option.member_type_name}</p>
         </li>
       ))}
       {filteredData.length === 0 && (

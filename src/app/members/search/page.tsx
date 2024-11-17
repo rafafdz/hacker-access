@@ -19,9 +19,9 @@ export default function MemberSearch() {
     } else {
       console.log(data)
       if (data) {
-        setRegistered(data.registrados || 0)
-        setAccesed(data.accedidos || 0)
-        setPendingAccess(data.por_acceder || 0) // Después cambiar los nombres de los atributos a la versión en inglés
+        setRegistered(data.registered || 0)
+        setAccesed(data.accessed || 0)
+        setPendingAccess(data.pending_access || 0)
       }
     }
   }
