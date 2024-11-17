@@ -1,40 +1,61 @@
-import Link from 'next/link'
-import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
-import { createServerClient } from '@/utils/supabase'
+'use client'
 
-export default async function AuthButton() {
-  const cookieStore = cookies()
-  const supabase = createServerClient(cookieStore)
+import { useEffect, useState } from 'react'
+import { createBrowserClient } from '@/utils/supabase'
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+const supabase = createBrowserClient()
+
+export default function AuthButton() {
+  const [user, setUser] = useState(null)
+
+  useEffect(() => {
+    const getUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      setUser(user)
+    }
+
+    getUser()
+  }, [])
+
+  const signInWithGoogle = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+    })
+
+    if (error) {
+      console.error('Error logging in with Google:', error.message)
+    }
+  }
 
   const signOut = async () => {
-    'use server'
-
-    const cookieStore = cookies()
-    const supabase = createServerClient(cookieStore)
-    await supabase.auth.signOut()
-    return redirect('/login')
+    const { error } = await supabase.auth.signOut()
+    if (error) {
+      console.error('Error logging out:', error.message)
+    } else {
+      setUser(null)
+    }
   }
 
   return user ? (
     <div className="flex items-center gap-4">
       Hey, {user.email}!
-      <form action={signOut}>
-        <button className="bg-btn-background hover:bg-btn-background-hover rounded-md px-4 py-2 no-underline">
-          Logout
-        </button>
-      </form>
+      <button
+        onClick={signOut}
+        className="bg-btn-background hover:bg-btn-background-hover rounded-md px-4 py-2 no-underline"
+      >
+        Logout
+      </button>
     </div>
   ) : (
-    <Link
-      href="/login"
-      className="bg-btn-background hover:bg-btn-background-hover flex rounded-md px-3 py-2 no-underline"
-    >
-      Login
-    </Link>
+    <div className="flex items-center gap-4">
+      <button
+        onClick={signInWithGoogle}
+        className="bg-btn-background hover:bg-btn-background-hover rounded-md px-4 py-2 no-underline"
+      >
+        Iniciar Sesión
+      </button>
+    </div>
   )
 }
