@@ -2,19 +2,10 @@ import { useState, useEffect, ChangeEvent } from 'react'
 import Dropdown from './Dropdown'
 import { createBrowserClient } from '@/utils/supabase'
 import { useRouter } from 'next/navigation'
+import { Member } from './interfaces'
 
 interface SearchBarProps {
   selectedButton: string
-}
-
-interface Member {
-  email: string
-  external_member_id: string
-  full_name: string
-  id: number
-  member_type_name: string
-  token: string
-  accessed: boolean
 }
 
 export default function SearchBar({ selectedButton }: SearchBarProps) {
