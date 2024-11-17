@@ -1,22 +1,53 @@
-import { useState } from 'react'
+'use client'
+import { useState, useEffect } from 'react'
 import { ChevronDown } from 'lucide-react'
 import NavbarDropdown from './NavbarDropdown'
 import SignoutButton from '../SignoutButton'
+import { createBrowserClient } from '@/utils/supabase'
+import { Entry } from '../interfaces'
 
 export default function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false)
-  const [selectedOption, setSelectedOption] = useState('Puerta Principal')
-  const filteredData = [
-    { name: 'Puerta Principal', id: 1 },
-    { name: 'Entrada Principal', id: 2 },
-    { name: 'Puerto Trasera', id: 3 },
-    { name: 'Subterraneo', id: 4 },
-  ]
+  const [selectedOption, setSelectedOption] = useState<Entry | null>(null)
+  const [entries, setEntries] = useState<Entry[]>([])
+  const supabase = createBrowserClient()
 
-  const handleOptionClick = (optionName: string) => {
-    setSelectedOption(optionName)
+  const handleOptionClick = (option: Entry) => {
+    setSelectedOption(option)
     setDropdownOpen(false)
+    localStorage.setItem('entrie', option.external_entry_id)
   }
+
+  async function fetchData() {
+    const { data, error } = await supabase.from('entries').select('*')
+    if (error) {
+      console.error('Error fetching entries:', error)
+    } else {
+      console.log('Fetched entries:', data)
+      setEntries(data as Entry[])
+
+      const storedExternalId = localStorage.getItem('entrie')
+
+      if (storedExternalId) {
+        console.log('Existe localstorage')
+        console.log(storedExternalId)
+        const matchedEntry = (data as Entry[]).find(
+          (entry) => entry.external_entry_id === storedExternalId,
+        )
+        if (matchedEntry) {
+          setSelectedOption(matchedEntry)
+        }
+      } else if (data?.length) {
+        const defaultEntry = data[0] as Entry
+        setSelectedOption(defaultEntry)
+        localStorage.setItem('entrie', defaultEntry.external_entry_id)
+      }
+    }
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [])
 
   return (
     <nav className="bg-background">
@@ -27,11 +58,11 @@ export default function Navbar() {
               onClick={() => setDropdownOpen(!dropdownOpen)}
               className="flex w-48 items-center justify-between rounded-md border-black px-3 py-2 text-sm font-medium text-[#bdbecb] text-foreground outline-none hover:text-primary"
             >
-              {selectedOption}
+              {selectedOption?.name ?? 'Seleccionar Entrada'}
               <ChevronDown className="ml-2 h-4 w-4" />
             </button>
             <NavbarDropdown
-              options={filteredData}
+              options={entries}
               onOptionClick={handleOptionClick}
               isOpen={dropdownOpen}
               selectedOption={selectedOption}

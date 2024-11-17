@@ -19,3 +19,9 @@ export type Member = {
   token: string
   accessed: boolean
 }
+
+export type Entry = {
+  id: number
+  name: string
+  external_entry_id: string
+}

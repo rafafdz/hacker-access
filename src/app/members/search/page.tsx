@@ -35,34 +35,36 @@ export default function MemberSearch() {
   }
 
   return (
-    <div className="mx-auto flex max-w-3xl flex-col items-center justify-center space-y-4">
-      <Navbar />
-      <div className="flex flex-col items-center space-y-4">
-        <div className="flex justify-center space-x-4">
-          <SearchFilterButton
-            label="registrados"
-            count={registered}
-            isSelected={selectedButton === 'registered'}
-            onClick={() => handleButtonClick('registered')}
-          />
-          <SearchFilterButton
-            label="accedidos"
-            count={accessed}
-            isSelected={selectedButton === 'accessed'}
-            onClick={() => handleButtonClick('accessed')}
-          />
-          <SearchFilterButton
-            label="por acceder"
-            count={pendingAccess}
-            isSelected={selectedButton === 'pending_access'}
-            onClick={() => handleButtonClick('pending_access')}
-          />
-        </div>
+    <>
+      <div className="mx-auto flex max-w-3xl flex-col items-center justify-center space-y-4">
+        <Navbar />
+        <div className="flex flex-col items-center space-y-4">
+          <div className="flex justify-center space-x-4">
+            <SearchFilterButton
+              label="registrados"
+              count={registered}
+              isSelected={selectedButton === 'registered'}
+              onClick={() => handleButtonClick('registered')}
+            />
+            <SearchFilterButton
+              label="accedidos"
+              count={accessed}
+              isSelected={selectedButton === 'accessed'}
+              onClick={() => handleButtonClick('accessed')}
+            />
+            <SearchFilterButton
+              label="por acceder"
+              count={pendingAccess}
+              isSelected={selectedButton === 'pending_access'}
+              onClick={() => handleButtonClick('pending_access')}
+            />
+          </div>
 
-        <div className="flex w-full justify-center">
-          <SearchBar selectedButton={selectedButton} />
+          <div className="flex w-full justify-center">
+            <SearchBar selectedButton={selectedButton} />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }

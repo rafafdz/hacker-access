@@ -50,6 +50,7 @@ export default function SearchBar({ selectedButton }: SearchBarProps) {
     if (lastSearch) {
       setInputValue(lastSearch)
       setIsDropdownVisible(lastSearch.length > 0)
+      localStorage.removeItem('lastSearch')
     }
   }, [])
 

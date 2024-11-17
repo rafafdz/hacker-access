@@ -1,10 +1,10 @@
-import { ChevronDown } from 'lucide-react'
+import { Entry } from '../interfaces'
 
 interface NavbarDropdownProps {
-  options: { name: string; id: number }[]
-  onOptionClick: (optionName: string) => void
+  options: Entry[]
+  onOptionClick: (option: Entry) => void
   isOpen: boolean
-  selectedOption: string
+  selectedOption: Entry | null
 }
 
 export default function NavbarDropdown({
@@ -21,9 +21,9 @@ export default function NavbarDropdown({
         {options.map((option) => (
           <li
             key={option.id}
-            onClick={() => onOptionClick(option.name)}
+            onClick={() => onOptionClick(option)}
             className={`cursor-pointer px-4 py-2 text-sm transition-colors duration-150 ease-in-out hover:bg-muted ${
-              selectedOption === option.name
+              selectedOption?.id === option.id
                 ? 'bg-muted text-primary'
                 : 'text-foreground'
             }`}
