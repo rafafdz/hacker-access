@@ -5,8 +5,8 @@ import LeftArrow from '@/components/ui/LeftArrow'
 import { useParams } from 'next/navigation'
 import { createBrowserClient } from '@/utils/supabase'
 import { useState, useEffect } from 'react'
-
-// Test with url http://localhost:3000/members/show/token123
+import { AccessLog } from '@/components/ui/interfaces'
+import { getCurrentDateTime } from '@/utils/current-date'
 
 interface Member {
   id: number
@@ -18,20 +18,51 @@ interface Member {
   accesses: number
 }
 
+const transformToCamelCase = (data: any[]): AccessLog[] => {
+  return data.map((log) => ({
+    accessId: log.access_id,
+    createdAt: log.created_at,
+    entryId: log.entry_id,
+    entryName: log.entry_name,
+    userId: log.user_id,
+  }))
+}
+
 export default function MemberShow() {
   const { token } = useParams()
   const supabase = createBrowserClient()
   const [member, setMember] = useState<Member | null>(null)
+  const [logs, setLogs] = useState<AccessLog[]>([])
 
   async function fetchData() {
-    const { data, error } = await supabase.rpc('get_member_by_token', {
-      token: token,
-    })
-    if (error) {
-      console.error(error)
-    } else {
-      setMember(data as Member)
+    try {
+      const { data: memberData, error: memberError } = await supabase.rpc(
+        'get_member_by_token',
+        { token: token },
+      )
+      if (memberError) throw memberError
+      setMember(memberData as Member)
+
+      const { data: logsData, error: logsError } = await supabase.rpc(
+        'get_accesses_by_member_id',
+        { member_id: memberData.id },
+      )
+      if (logsError) throw logsError
+      const transformedData = transformToCamelCase(logsData)
+      setLogs(transformedData)
+    } catch (error) {
+      console.error('Error fetching data:', error)
     }
+  }
+
+  const handleRegister = () => {
+    const entryId = localStorage.getItem('entrie')
+    const currentDate = getCurrentDateTime()
+
+    console.log('Miembro:', member?.full_name)
+    console.log('Entry ID:', entryId)
+    console.log('Hora actual:', currentDate)
+    console.log('Access Logs:', logs)
   }
 
   useEffect(() => {
@@ -58,9 +89,9 @@ export default function MemberShow() {
             <p className="text-[#c3c3da]">Accesos: {member.accesses}</p>
           </div>
           <div>
-            <LogsBox id={member.id} />
+            <LogsBox logs={logs} />
           </div>
-          <Button label="Registrar Entrada" />
+          <Button label="Registrar Entrada" onClick={handleRegister} />
         </>
       ) : (
         <p>Cargando...</p>

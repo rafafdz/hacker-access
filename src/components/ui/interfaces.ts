@@ -3,7 +3,7 @@ export type AccessLog = {
   createdAt: string
   entryId: number
   entryName: string
-  userId: string
+  userId: number
 }
 
 export type LogsBoxProps = {
