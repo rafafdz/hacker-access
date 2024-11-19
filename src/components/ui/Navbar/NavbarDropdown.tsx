@@ -13,10 +13,14 @@ export default function NavbarDropdown({
   isOpen,
   selectedOption,
 }: NavbarDropdownProps) {
-  if (!isOpen) return null
-
   return (
-    <div className="w-54 absolute left-0 top-full z-50 mt-1 rounded-md border border-border bg-background shadow-lg">
+    <div
+      className={`w-54 absolute left-1 top-full z-50 mt-1 transform rounded-md border border-border bg-background shadow-lg transition-all duration-200 ${
+        isOpen
+          ? 'translate-y-0 scale-100 opacity-100'
+          : 'pointer-events-none -translate-y-2 scale-95 opacity-0'
+      }`}
+    >
       <ul className="py-1">
         {options.map((option) => (
           <li
