@@ -1,5 +1,6 @@
 'use client'
 import Button from '@/components/ui/Button'
+import Modal from '@/components/ui/Modal'
 import LogsBox from '@/components/ui/LogsBox'
 import LeftArrow from '@/components/ui/LeftArrow'
 import { useParams } from 'next/navigation'
@@ -33,6 +34,7 @@ export default function MemberShow() {
   const supabase = createBrowserClient()
   const [member, setMember] = useState<Member | null>(null)
   const [logs, setLogs] = useState<AccessLog[]>([])
+  const [showRegister, setShowRegister] = useState<boolean>(false)
 
   async function fetchData() {
     try {
@@ -56,6 +58,11 @@ export default function MemberShow() {
   }
 
   const handleRegister = () => {
+    setShowRegister(true)
+  }
+
+  const confirmRegister = async () => {
+    setShowRegister(false)
     const entryId = localStorage.getItem('entrie')
     const currentDate = getCurrentDateTime()
 
@@ -96,6 +103,13 @@ export default function MemberShow() {
       ) : (
         <p>Cargando...</p>
       )}
+      <Modal
+        isOpen={showRegister}
+        title="Confirmar Registro"
+        description="¿Estás seguro de registrar este acceso?"
+        onClose={() => setShowRegister(false)}
+        onConfirm={confirmRegister}
+      />
     </div>
   )
 }
