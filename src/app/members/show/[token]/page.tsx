@@ -17,6 +17,8 @@ interface Member {
   external_member_id: string
   member_type_name: string
   accesses: number
+  extra_data: string
+  national_id: string
 }
 
 const transformToCamelCase = (data: any[]): AccessLog[] => {
@@ -66,10 +68,47 @@ export default function MemberShow() {
     const entryId = localStorage.getItem('entrie')
     const currentDate = getCurrentDateTime()
 
-    console.log('Miembro:', member?.full_name)
-    console.log('Entry ID:', entryId)
-    console.log('Hora actual:', currentDate)
-    console.log('Access Logs:', logs)
+    const data = {
+      created_at: currentDate,
+      member: {
+        full_name: member?.full_name,
+        email: member?.email,
+        token: member?.token,
+        member_type_id: member?.external_member_id,
+        external_member_id: member?.external_member_id,
+        national_id: member?.national_id,
+        extra_data: member?.extra_data,
+      },
+      entry: {
+        name: entryId,
+      },
+      user: 'Validador',
+      access: logs.map((log) => ({
+        entryName: log.entryName,
+        createdAt: log.createdAt,
+        entryId: log.entryId,
+        accessId: log.accessId,
+      })),
+    }
+    //console.log(data)
+    try {
+      const response = await fetch('http://127.0.0.1:8000/submit-access', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+
+      if (!response.ok) {
+        throw new Error('Error al enviar los datos al servidor')
+      }
+
+      const responseData = await response.json()
+      console.log('Respuesta del servidor:', responseData)
+    } catch (error) {
+      console.error('Error:', error)
+    }
   }
 
   useEffect(() => {
@@ -91,9 +130,9 @@ export default function MemberShow() {
           </div>
           <div className="flex flex-col items-center">
             <p className="text-[#c3c3da]">
-              {member.external_member_id || 'No ID provided'}
+              {member.national_id || 'No ID provided'}
             </p>
-            <p className="text-[#c3c3da]">Accesos: {member.accesses}</p>
+            <p className="text-[#c3c3da]">{member.extra_data}</p>
           </div>
           <div>
             <LogsBox logs={logs} />
