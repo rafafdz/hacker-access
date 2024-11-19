@@ -9,7 +9,7 @@ import { useState, useEffect } from 'react'
 import { AccessLog } from '@/components/ui/interfaces'
 import { getCurrentDateTime } from '@/utils/current-date'
 
-interface Member {
+type Member = {
   id: number
   full_name: string
   email: string
