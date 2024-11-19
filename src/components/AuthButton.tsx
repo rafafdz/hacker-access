@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { redirect } from 'next/navigation'
 import { createBrowserClient } from '@/utils/supabase'
 
 const supabase = createBrowserClient()
@@ -22,6 +23,9 @@ export default function AuthButton() {
   const signInWithGoogle = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
+      options: {
+        redirectTo: 'http://localhost:3000/login',
+      },
     })
 
     if (error) {
@@ -29,25 +33,8 @@ export default function AuthButton() {
     }
   }
 
-  const signOut = async () => {
-    const { error } = await supabase.auth.signOut()
-    if (error) {
-      console.error('Error logging out:', error.message)
-    } else {
-      setUser(null)
-    }
-  }
-
   return user ? (
-    <div className="flex items-center gap-4">
-      Hey, {user.email}!
-      <button
-        onClick={signOut}
-        className="bg-btn-background hover:bg-btn-background-hover rounded-md px-4 py-2 no-underline"
-      >
-        Logout
-      </button>
-    </div>
+    redirect('/members/search')
   ) : (
     <div className="flex items-center gap-4">
       <button
