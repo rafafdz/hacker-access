@@ -3,14 +3,17 @@ import { useState, useEffect } from 'react'
 import { ChevronDown } from 'lucide-react'
 import NavbarDropdown from './NavbarDropdown'
 import SignoutButton from '../SignoutButton'
+import SignoutDropdown from '../SignoutDropdown'
 import { createBrowserClient } from '@/utils/supabase'
 import { Entry } from '../interfaces'
 
 export default function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [signoutDropdownOpen, setSignoutDropdownOpen] = useState(false) // Estado para el dropdown de Signout
   const [selectedOption, setSelectedOption] = useState<Entry | null>(null)
   const [entries, setEntries] = useState<Entry[]>([])
   const supabase = createBrowserClient()
+  const dummyUserName = 'Robert Oppenheimer' // Nombre dummy para el usuario
 
   const handleOptionClick = (option: Entry) => {
     setSelectedOption(option)
@@ -69,8 +72,16 @@ export default function Navbar() {
             />
           </div>
 
-          <div className="ml-auto flex items-center space-x-4">
-            <SignoutButton />
+          <div className="relative flex items-center space-x-4">
+            <SignoutButton
+              onClick={() => setSignoutDropdownOpen(!signoutDropdownOpen)}
+            />
+            {signoutDropdownOpen && (
+              <SignoutDropdown
+                userName={dummyUserName}
+                onClose={() => setSignoutDropdownOpen(false)}
+              />
+            )}
           </div>
         </div>
       </div>
