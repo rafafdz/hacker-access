@@ -39,7 +39,7 @@ export default function MemberSearch() {
       <div className="mx-auto flex max-w-3xl flex-col items-center justify-center space-y-4">
         <Navbar />
         <div className="flex flex-col items-center space-y-4">
-          <div className="flex justify-center space-x-4">
+          <div className="flex w-full justify-center space-x-8">
             <SearchFilterButton
               label="registrados"
               count={registered}

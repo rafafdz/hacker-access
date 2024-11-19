@@ -51,9 +51,9 @@ export default function Navbar() {
 
   return (
     <nav className="bg-background">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
-          <div className="relative">
+          <div className="relative mr-14">
             <button
               onClick={() => setDropdownOpen(!dropdownOpen)}
               className="flex w-48 items-center justify-between rounded-md border-black px-3 py-2 text-sm font-medium text-[#bdbecb] text-foreground outline-none hover:text-primary"

@@ -16,7 +16,7 @@ const SearchFilterButton: React.FC<SearchFilterButtonProps> = ({
   return (
     <button
       onClick={onClick}
-      className={`m-1 h-[70px] w-[70px] rounded-xl border-2 bg-transparent ${
+      className={`h-[70px] w-[70px] rounded-xl border-2 bg-transparent ${
         isSelected ? 'border-[#00B700]' : 'border-[#FFEC40]'
       }`}
     >

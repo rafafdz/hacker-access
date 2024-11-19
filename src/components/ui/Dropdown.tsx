@@ -11,7 +11,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   handleOptionClick,
 }) => {
   return (
-    <ul className="absolute top-[50px] max-h-96 w-80 overflow-y-auto rounded-[8px] bg-zinc-700 shadow-lg">
+    <ul className="absolute top-[50px] max-h-96 w-72 overflow-y-auto rounded-[8px] bg-zinc-700 shadow-lg">
       {filteredData.map((option) => (
         <li
           key={option.token}
