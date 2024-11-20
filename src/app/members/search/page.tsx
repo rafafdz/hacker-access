@@ -2,27 +2,26 @@
 import { useState, useEffect } from 'react'
 import SearchFilterButton from '@/components/ui/SearchFilterButton'
 import SearchBar from '@/components/ui/SearchBar'
-import { createBrowserClient } from '@/utils/supabase'
 import Navbar from '@/components/ui/Navbar/Navbar'
 
 export default function MemberSearch() {
   const [selectedButton, setSelectedButton] = useState<string>('registered')
-  const supabase = createBrowserClient()
   const [registered, setRegistered] = useState<number>(0)
   const [accessed, setAccesed] = useState<number>(0)
   const [pendingAccess, setPendingAccess] = useState<number>(0)
 
   async function fetchData() {
-    const { data, error } = await supabase.rpc('get_kpi_summary')
-    if (error) {
-      console.error(error)
-    } else {
-      console.log(data)
-      if (data) {
-        setRegistered(data.registrados || 0)
-        setAccesed(data.accedidos || 0)
-        setPendingAccess(data.por_acceder || 0) // Después cambiar los nombres de los atributos a la versión en inglés
+    try {
+      const response = await fetch('/api/kpi-summary')
+      if (!response.ok) {
+        throw new Error('Error fetching data')
       }
+      const data = await response.json()
+      setRegistered(data.registered || 0)
+      setAccesed(data.accessed || 0)
+      setPendingAccess(data.pending_access || 0)
+    } catch (error) {
+      console.error('Error fetching data:', error)
     }
   }
 
@@ -38,7 +37,7 @@ export default function MemberSearch() {
     <div className="mx-auto flex max-w-3xl flex-col items-center justify-center space-y-4">
       <Navbar />
       <div className="flex flex-col items-center space-y-4">
-        <div className="flex justify-center space-x-4">
+        <div className="flex w-full justify-center space-x-8">
           <SearchFilterButton
             label="registrados"
             count={registered}
