@@ -86,7 +86,7 @@ export default function MemberShow() {
       entry: {
         name: entryId,
       },
-      user: 'Validador',
+      user: user?.user_metadata.full_name,
       access: logs.map((log) => ({
         entryName: log.entryName,
         createdAt: log.createdAt,
