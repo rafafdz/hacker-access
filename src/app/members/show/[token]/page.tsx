@@ -129,7 +129,7 @@ export default function MemberShow() {
     }
 
     getUser()
-  }, [supabase, user])
+  }, [])
 
   useEffect(() => {
     fetchData()
