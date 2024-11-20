@@ -20,7 +20,7 @@ export default function SearchBar({ selectedButton }: SearchBarProps) {
       (option) =>
         option.full_name.toLowerCase().includes(inputValue.toLowerCase()) ||
         (option.national_id &&
-          option.national_id.toLowerCase().includes(inputValue.toLowerCase())), // Verifica si `national_id` no es null/undefined
+          option.national_id.toLowerCase().includes(inputValue.toLowerCase())),
     )
     .filter((option) => {
       if (selectedButton === 'registered') return true

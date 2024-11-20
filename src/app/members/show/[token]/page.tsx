@@ -100,7 +100,7 @@ export default function MemberShow() {
           {
             member_id: member?.id,
             entry_id: entryId,
-            user_id: '84cf0b3a-688d-44d9-9291-ff258125cea2',
+            user_id: '84cf0b3a-688d-44d9-9291-ff258125cea2', // TODO: cambiar dummy data
             created_at: currentDate,
           },
         ])

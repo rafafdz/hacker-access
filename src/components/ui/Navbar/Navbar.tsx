@@ -9,11 +9,11 @@ import { Entry } from '../interfaces'
 
 export default function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false)
-  const [signoutDropdownOpen, setSignoutDropdownOpen] = useState(false) // Estado para el dropdown de Signout
+  const [signoutDropdownOpen, setSignoutDropdownOpen] = useState(false)
   const [selectedOption, setSelectedOption] = useState<Entry | null>(null)
   const [entries, setEntries] = useState<Entry[]>([])
   const supabase = createBrowserClient()
-  const dummyUserName = 'Robert Oppenheimer' // Nombre dummy para el usuario
+  const dummyUserName = 'Robert Oppenheimer' // TODO: cambiar a user data
 
   const handleOptionClick = (option: Entry) => {
     setSelectedOption(option)

@@ -14,15 +14,11 @@ export default function LogsBox({ logs }: { logs: AccessLog[] }) {
   return (
     <div className="flex h-40 max-h-40 w-72 flex-col items-center overflow-y-auto rounded-lg border border-zinc-700 bg-zinc-900 p-4 shadow-inner">
       {logs.length > 0 ? (
-        [...logs].reverse().map(
-          (
-            log, // Copia el array y luego invierte
-          ) => (
-            <p key={log.accessId} className="mb-2 text-xs text-slate-400">
-              {formatDate(log.createdAt)} @ {log.entryName}
-            </p>
-          ),
-        )
+        [...logs].reverse().map((log) => (
+          <p key={log.accessId} className="mb-2 text-xs text-slate-400">
+            {formatDate(log.createdAt)} @ {log.entryName}
+          </p>
+        ))
       ) : (
         <p className="text-xs text-[#a3a3b6]">No hay accesos registrados.</p>
       )}
