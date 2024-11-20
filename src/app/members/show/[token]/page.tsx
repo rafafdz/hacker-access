@@ -8,6 +8,7 @@ import { createBrowserClient } from '@/utils/supabase'
 import { useState, useEffect } from 'react'
 import { AccessLog } from '@/components/ui/interfaces'
 import { getCurrentDateTime } from '@/utils/current-date'
+import { useRouter } from 'next/navigation'
 
 type Member = {
   id: number
@@ -19,6 +20,7 @@ type Member = {
   accesses: number
   extra_data: string
   national_id: string
+  access_enabled: boolean
 }
 
 const transformToCamelCase = (data: any[]): AccessLog[] => {
@@ -37,6 +39,7 @@ export default function MemberShow() {
   const [member, setMember] = useState<Member | null>(null)
   const [logs, setLogs] = useState<AccessLog[]>([])
   const [showRegister, setShowRegister] = useState<boolean>(false)
+  const router = useRouter()
 
   async function fetchData() {
     try {
@@ -107,6 +110,7 @@ export default function MemberShow() {
         console.error('Error al insertar datos:', error)
       } else {
         console.log('Datos insertados correctamente:', data)
+        router.push('/members/search')
       }
     } catch (err) {
       console.error('Error inesperado:', err)
@@ -139,7 +143,11 @@ export default function MemberShow() {
           <div>
             <LogsBox logs={logs} />
           </div>
-          <Button label="Registrar Entrada" onClick={handleRegister} />
+          <Button
+            label="Registrar Entrada"
+            onClick={handleRegister}
+            disabled={!member?.access_enabled}
+          />
         </>
       ) : (
         <p>Cargando...</p>
