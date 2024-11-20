@@ -18,7 +18,7 @@ export default function Navbar() {
   const handleOptionClick = (option: Entry) => {
     setSelectedOption(option)
     setDropdownOpen(false)
-    localStorage.setItem('entrie', option.external_entry_id)
+    localStorage.setItem('entrie', option.id.toString())
   }
 
   async function fetchData() {
@@ -35,7 +35,7 @@ export default function Navbar() {
         console.log('Existe localstorage')
         console.log(storedExternalId)
         const matchedEntry = (data as Entry[]).find(
-          (entry) => entry.external_entry_id === storedExternalId,
+          (entry) => entry.id.toString() === storedExternalId,
         )
         if (matchedEntry) {
           setSelectedOption(matchedEntry)
@@ -43,7 +43,7 @@ export default function Navbar() {
       } else if (data?.length) {
         const defaultEntry = data[0] as Entry
         setSelectedOption(defaultEntry)
-        localStorage.setItem('entrie', defaultEntry.external_entry_id)
+        localStorage.setItem('entrie', defaultEntry.id.toString())
       }
     }
   }

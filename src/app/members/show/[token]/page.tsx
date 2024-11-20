@@ -90,24 +90,26 @@ export default function MemberShow() {
         accessId: log.accessId,
       })),
     }
-    //console.log(data)
     try {
-      const response = await fetch('http://127.0.0.1:8000/submit-access', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      })
+      const { data, error } = await supabase
+        .from('accesses')
+        .insert([
+          {
+            member_id: member?.id,
+            entry_id: entryId,
+            user_id: '84cf0b3a-688d-44d9-9291-ff258125cea2',
+            created_at: currentDate,
+          },
+        ])
+        .select()
 
-      if (!response.ok) {
-        throw new Error('Error al enviar los datos al servidor')
+      if (error) {
+        console.error('Error al insertar datos:', error)
+      } else {
+        console.log('Datos insertados correctamente:', data)
       }
-
-      const responseData = await response.json()
-      console.log('Respuesta del servidor:', responseData)
-    } catch (error) {
-      console.error('Error:', error)
+    } catch (err) {
+      console.error('Error inesperado:', err)
     }
   }
 
