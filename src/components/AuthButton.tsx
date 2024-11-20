@@ -1,40 +1,87 @@
-import Link from 'next/link'
-import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
-import { createServerClient } from '@/utils/supabase'
+'use client'
 
-export default async function AuthButton() {
-  const cookieStore = cookies()
-  const supabase = createServerClient(cookieStore)
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { createBrowserClient } from '@/utils/supabase'
+import { User } from '@supabase/supabase-js' // Import the User type
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+const supabase = createBrowserClient()
 
-  const signOut = async () => {
-    'use server'
+export default function AuthButton() {
+  const [user, setUser] = useState<User | null>(null) // Define the state type
+  const [loading, setLoading] = useState<boolean>(true)
+  const router = useRouter()
 
-    const cookieStore = cookies()
-    const supabase = createServerClient(cookieStore)
-    await supabase.auth.signOut()
-    return redirect('/login')
+  useEffect(() => {
+    const getUser = async () => {
+      // Call the endpoint to check the session
+      try {
+        const response = await fetch('/api/auth/check-session')
+        const data = await response.json()
+
+        // If the session is active, set the user
+        if (data.user) {
+          setUser(data.user)
+        } else {
+          setUser(null)
+        }
+      } catch (error) {
+        console.log(error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    getUser()
+  }, [])
+
+  useEffect(() => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_, session) => {
+      if (session?.user) {
+        setUser(session.user)
+      } else {
+        setUser(null)
+      }
+    })
+
+    return () => {
+      subscription.unsubscribe()
+    }
+  }, [])
+
+  useEffect(() => {
+    if (user) {
+      router.push('/members/search')
+    }
+  }, [user, router])
+
+  const signInWithGoogle = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: 'http://localhost:3000/login',
+      },
+    })
+
+    if (error) {
+      console.error('Error logging in with Google:', error.message)
+    }
   }
 
-  return user ? (
+  if (loading) {
+    return <div>Loading...</div>
+  }
+
+  return (
     <div className="flex items-center gap-4">
-      Hey, {user.email}!
-      <form action={signOut}>
-        <button className="bg-btn-background hover:bg-btn-background-hover rounded-md px-4 py-2 no-underline">
-          Logout
-        </button>
-      </form>
+      <button
+        onClick={signInWithGoogle}
+        className="rounded-[10px] bg-[#FFEC40] p-2 px-8 text-[14px] text-black hover:bg-[#F9BC12]"
+      >
+        Iniciar Sesión
+      </button>
     </div>
-  ) : (
-    <Link
-      href="/login"
-      className="bg-btn-background hover:bg-btn-background-hover flex rounded-md px-3 py-2 no-underline"
-    >
-      Login
-    </Link>
   )
 }

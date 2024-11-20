@@ -5,6 +5,7 @@ import LogsBox from '@/components/ui/LogsBox'
 import LeftArrow from '@/components/ui/LeftArrow'
 import { useParams } from 'next/navigation'
 import { createBrowserClient } from '@/utils/supabase'
+import { User } from '@supabase/supabase-js'
 import { useState, useEffect } from 'react'
 import { AccessLog } from '@/components/ui/interfaces'
 import { getCurrentDateTime } from '@/utils/current-date'
@@ -85,7 +86,7 @@ export default function MemberShow() {
       entry: {
         name: entryId,
       },
-      user: 'Validador',
+      user: user?.user_metadata.full_name,
       access: logs.map((log) => ({
         entryName: log.entryName,
         createdAt: log.createdAt,
@@ -100,7 +101,7 @@ export default function MemberShow() {
           {
             member_id: member?.id,
             entry_id: entryId,
-            user_id: '84cf0b3a-688d-44d9-9291-ff258125cea2', // TODO: cambiar dummy data
+            user_id: user?.id,
             created_at: currentDate,
           },
         ])
@@ -116,6 +117,19 @@ export default function MemberShow() {
       console.error('Error inesperado:', err)
     }
   }
+
+  const [user, setUser] = useState<User | null>(null)
+
+  useEffect(() => {
+    const getUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      setUser(user)
+    }
+
+    getUser()
+  }, [])
 
   useEffect(() => {
     fetchData()

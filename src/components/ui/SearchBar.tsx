@@ -1,6 +1,5 @@
 import { useState, useEffect, ChangeEvent } from 'react'
 import Dropdown from './Dropdown'
-import { createBrowserClient } from '@/utils/supabase'
 import { useRouter } from 'next/navigation'
 import { Member } from './interfaces'
 
@@ -12,7 +11,6 @@ export default function SearchBar({ selectedButton }: SearchBarProps) {
   const [isDropdownVisible, setIsDropdownVisible] = useState<boolean>(false)
   const [inputValue, setInputValue] = useState<string>('')
   const [members, setMembers] = useState<Member[]>([])
-  const supabase = createBrowserClient()
   const router = useRouter()
 
   const filteredData = members
@@ -39,11 +37,15 @@ export default function SearchBar({ selectedButton }: SearchBarProps) {
   }
 
   async function fetchData() {
-    const { data, error } = await supabase.rpc('get_members')
-    if (error) {
-      console.log(error)
-    } else {
+    try {
+      const response = await fetch('/api/get-members')
+      if (!response.ok) {
+        throw new Error('Failed to fetch members')
+      }
+      const data = await response.json()
       setMembers(data as Member[])
+    } catch (error) {
+      console.log(error)
     }
   }
 

@@ -1,4 +1,4 @@
-import Button from '@/components/ui/Button'
+import AuthButton from '@/components/AuthButton'
 
 export default function LoginPage() {
   return (
@@ -7,7 +7,7 @@ export default function LoginPage() {
         <h1 className="text-3xl">Platanus</h1>
         <h1 className="text-3xl">Hack</h1>
       </div>
-      <Button label="Iniciar Sesión" />
+      <AuthButton />
     </div>
   )
 }
