@@ -5,7 +5,9 @@ import NavbarDropdown from './NavbarDropdown'
 import SignoutButton from '../SignoutButton'
 import SignoutDropdown from '../SignoutDropdown'
 import { createBrowserClient } from '@/utils/supabase'
+import { User } from '@supabase/supabase-js'
 import { Entry } from '../interfaces'
+import { useRouter } from 'next/navigation'
 
 export default function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false)
@@ -13,7 +15,7 @@ export default function Navbar() {
   const [selectedOption, setSelectedOption] = useState<Entry | null>(null)
   const [entries, setEntries] = useState<Entry[]>([])
   const supabase = createBrowserClient()
-  const dummyUserName = 'Robert Oppenheimer' // TODO: cambiar a user data
+  const router = useRouter()
 
   const handleOptionClick = (option: Entry) => {
     setSelectedOption(option)
@@ -48,6 +50,29 @@ export default function Navbar() {
     }
   }
 
+  const [user, setUser] = useState<User | null>(null)
+
+  useEffect(() => {
+    const getUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      setUser(user)
+    }
+
+    getUser()
+  }, [supabase, user])
+
+  const signOut = async () => {
+    const { error } = await supabase.auth.signOut()
+    if (error) {
+      console.error('Error logging out:', error.message)
+    } else {
+      setUser(null)
+      router.push('/login')
+    }
+  }
+
   useEffect(() => {
     fetchData()
   }, [])
@@ -78,8 +103,8 @@ export default function Navbar() {
             />
             {signoutDropdownOpen && (
               <SignoutDropdown
-                userName={dummyUserName}
-                onClose={() => setSignoutDropdownOpen(false)}
+                userName={user?.user_metadata.full_name}
+                onClose={signOut}
               />
             )}
           </div>
