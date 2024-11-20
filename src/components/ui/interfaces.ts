@@ -17,6 +17,7 @@ export type Member = {
   id: number
   member_type_name: string
   token: string
+  national_id: string
   accessed: boolean
 }
 

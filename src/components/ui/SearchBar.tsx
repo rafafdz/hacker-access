@@ -16,8 +16,11 @@ export default function SearchBar({ selectedButton }: SearchBarProps) {
   const router = useRouter()
 
   const filteredData = members
-    .filter((option) =>
-      option.full_name.toLowerCase().includes(inputValue.toLowerCase()),
+    .filter(
+      (option) =>
+        option.full_name.toLowerCase().includes(inputValue.toLowerCase()) ||
+        (option.national_id &&
+          option.national_id.toLowerCase().includes(inputValue.toLowerCase())), // Verifica si `national_id` no es null/undefined
     )
     .filter((option) => {
       if (selectedButton === 'registered') return true
