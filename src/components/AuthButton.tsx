@@ -20,6 +20,8 @@ export default function AuthButton() {
         const response = await fetch('/api/auth/check-session')
         const data = await response.json()
 
+        console.log(data)
+
         // If the session is active, set the user
         if (data.user) {
           setUser(data.user)
