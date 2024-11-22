@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createBrowserClient } from '@/utils/supabase'
 import { User } from '@supabase/supabase-js' // Import the User type
+import { defaultUrl } from '@/utils/config'
 
 const supabase = createBrowserClient()
 
@@ -61,7 +62,7 @@ export default function AuthButton() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: 'http://localhost:3000/login',
+        redirectTo: `${defaultUrl}/login`,
       },
     })
 

@@ -5,6 +5,7 @@ import { Analytics } from '@vercel/analytics/react'
 import './globals.css'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import ReactQueryProvider from '@/providers/ReactQueryProvider'
+import { defaultUrl } from '@/utils/config'
 
 const oxanium = Oxanium({
   weight: ['400', '500'],
@@ -19,10 +20,6 @@ const jetBrainsMono = JetBrains_Mono({
   variable: '--font-jetbrains-mono',
   display: 'swap',
 })
-
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : 'http://localhost:3000'
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
